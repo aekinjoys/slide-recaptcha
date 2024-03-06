@@ -641,6 +641,7 @@
               <div class="form-row">
                 <div class="col-12">
                   <div class="slidercaptcha card">
+			
                     <div class="card-header">
                       <span>{text.title}</span>
                       <div class="refreshIcon" onClick={refreshCaptcha}>
@@ -674,6 +675,7 @@
                   </div>
                 </div>
               </div>
+			  	  <button onClick={verifiedCallback}>SendCallBack</button>
             </div>
             <div className="scaptcha-container">
               <div className="scaptcha-card-container scaptcha-card-element">
@@ -739,6 +741,7 @@
 
       function verifiedCallback() {
         console.log("Next Page");
+		RecaptchaFlutterChannel('testdata');
       }
 
       const domain = "http://34.149.81.171/poc-captcha-image-generator/";
