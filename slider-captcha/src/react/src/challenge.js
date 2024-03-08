@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { ArrowIcon, SuccessIcon, FailureIcon } from './icons';
-import { Buffer } from 'buffer';
 
 const imageDataUrl = (image) =>
   `data:image/png;base64,${image}`;
@@ -33,7 +31,6 @@ const Challenge = ({
   text,
   captcha,
   loaded,
-  verified,
   failed,
   completeCaptcha,
 }) => {
@@ -81,8 +78,8 @@ const Challenge = ({
     completeCaptcha(
       scaleSliderPosition(trail.x[trail.x.length - 1]),
       trail,
-      captcha.left
-    )
+      // captcha.left
+    );
   };
 
   const handleEnter = () => {
@@ -109,8 +106,8 @@ const Challenge = ({
         className="scaptcha-card-background scaptcha-card-element"
         style={{
           backgroundImage:
-            captcha.background
-              ? `url('${imageDataUrl(captcha.background)}')`
+            captcha['captcha_image']
+              ? `url('${imageDataUrl(captcha['captcha_image'])}')`
               : ``,
         }}
       />
@@ -118,8 +115,8 @@ const Challenge = ({
         className="scaptcha-card-slider-puzzle scaptcha-card-element"
         style={{
           backgroundImage:
-            loaded && captcha.slider
-              ? `url('${imageDataUrl(captcha.slider)}')`
+            loaded && captcha['captcha_slider']
+              ? `url('${imageDataUrl(captcha['captcha_slider'])}')`
               : ``,
           left: `${scaleSliderPosition(trail.x[trail.x.length - 1])}px`,
         }}

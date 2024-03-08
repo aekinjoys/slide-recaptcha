@@ -1,13 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import { LoadingIcon } from './icons';
+import React from 'react';
 import Challenge from './challenge';
 
 const Card = ({
   text,
-  fetchCaptcha,
-  submitResponse,
-  verified,
   failed,
 }) => {
   const { useState, useRef, useEffect } = React;
@@ -17,8 +12,8 @@ const Card = ({
   const [title, setTitle] = useState('ยืนยันตัวตน');
   const isMounted = useRef(false);
 
-  const refreshCaptcha = () => window.RecaptchaFlutterChannel?.postMessage(JSON.stringify({ action: "refresh", data: null }))
-
+  const closeCaptcha = () => window.RecaptchaFlutterChannel?.postMessage(JSON.stringify({ action: "close", data: null }));
+  const refreshCaptcha = () => window.RecaptchaFlutterChannel?.postMessage(JSON.stringify({ action: "refresh", data: null }));
   const completeCaptcha = (response, trail, left) => {
     const data = {
       action: "completeCaptcha",
@@ -40,9 +35,9 @@ const Card = ({
   useEffect(() => {
     const handleMessageFromFlutter = (event) => {
       try {
-        setCaptcha(event.data)
+        setCaptcha(event.data);
       } catch (e) {
-        window.RecaptchaFlutterChannel?.postMessage(JSON.stringify({ action: "log", data: e.message }))
+        window.RecaptchaFlutterChannel?.postMessage(JSON.stringify({ action: "log", data: e.message }));
       }
     };
 
@@ -53,7 +48,6 @@ const Card = ({
     };
   }, []);
 
-  const closeCaptcha = () => window.RecaptchaFlutterChannel?.postMessage(JSON.stringify({ action: "close", data: null }))
 
   return (
     <div>
@@ -84,6 +78,9 @@ const Card = ({
             <div className="slidercaptcha card">
               <div className="card-header">
                 <span>{text.title}</span>
+                {/* <div>{`${captcha}`}</div> */}
+                {/* <div>{`${captcha['captcha_image']}`}</div> */}
+                {/* <div>{`${captcha.captcha_image}`}</div> */}
                 <div className="refreshIcon" onClick={refreshCaptcha}>
                   <svg
                     width="20"
@@ -107,7 +104,6 @@ const Card = ({
                   text={text}
                   captcha={captcha}
                   loaded={!loading}
-                  verified={verified}
                   failed={failed}
                   completeCaptcha={completeCaptcha}
                 />
@@ -124,14 +120,5 @@ const Card = ({
     </div>
   );
 };
-
-// Card.propTypes = {
-//   fetchCaptcha: PropTypes.func.isRequired,
-//   submitResponse: PropTypes.func.isRequired,
-//   text: PropTypes.shape({
-//     anchor: PropTypes.string,
-//     challenge: PropTypes.string,
-//   }).isRequired,
-// };
 
 export default Card;
